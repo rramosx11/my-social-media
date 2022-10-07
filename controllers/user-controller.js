@@ -47,10 +47,14 @@ const userController = {
   },
   // update User by id
   updateUser({ params, body }, res) {
-    User.findOneAndUpdate({ _id: params.id }, body, {
-      new: true,
-      runValidators: true,
-    })
+    User.findOneAndUpdate(
+      { _id: params.id },
+      { $set: body },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
       .then((dbUserData) => {
         if (!dbUserData) {
           res.status(404).json({ message: "No User found with this id!" });
@@ -69,11 +73,15 @@ const userController = {
           res.status(404).json({ message: "No User found with this id!" });
           return;
         }
-        res.json(dbUserData);
+        return Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
+      })
+      .then(() => {
+        res.json({ message: "User and Thought are deleted" });
       })
       .catch((err) => res.status(400).json(err));
   },
-  // /api/users/:userid/fiends/:friendId
+
+  // /api/users/:userid/friends/:friendId
   addFriend({ params }, res) {
     User.findOneAndUpdate(
       { _id: params.userId },
