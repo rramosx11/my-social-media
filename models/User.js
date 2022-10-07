@@ -14,7 +14,6 @@ const UserSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      validate: [validateEmail, "Please fill a valid email address"],
       match: [
         /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
         "Please fill a valid email address",
@@ -53,6 +52,6 @@ UserSchema.virtual("friendCount").get(function () {
 
 const User = model("User", UserSchema);
 
-// export the pizza model
+// export the User model
 
-module.exports = Pizza;
+module.exports = User;
