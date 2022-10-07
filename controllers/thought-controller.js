@@ -59,6 +59,22 @@ const thoughtController = {
       .catch((err) => res.json(err));
   },
 
+  // update Thought by id
+  updateThought({ params, body }, res) {
+    Thought.findOneAndUpdate({ _id: params.id }, body, {
+      new: true,
+      runValidators: true,
+    })
+      .then((dbThoughtData) => {
+        if (!dbThoughtData) {
+          res.status(404).json({ message: "No Thought found with this id!" });
+          return;
+        }
+        res.json(dbThoughtData);
+      })
+      .catch((err) => res.json(err));
+  },
+
   // delete thought by ID
   deleteThought({ params }, res) {
     Thought.findOneAndDelete({ _id: params.id })
@@ -79,22 +95,6 @@ const thoughtController = {
           return;
         }
         res.json(dbUserData);
-      })
-      .catch((err) => res.json(err));
-  },
-
-  // update Thought by id
-  updateThought({ params, body }, res) {
-    Thought.findOneAndUpdate({ _id: params.id }, body, {
-      new: true,
-      runValidators: true,
-    })
-      .then((dbThoughtData) => {
-        if (!dbThoughtData) {
-          res.status(404).json({ message: "No Thought found with this id!" });
-          return;
-        }
-        res.json(dbThoughtData);
       })
       .catch((err) => res.json(err));
   },
